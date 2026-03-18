@@ -60,7 +60,7 @@ async function launchXApp(command: string): Promise<XAppSession> {
   let childCommand = command;
   const bin = command.split(/\s+/)[0].split("/").pop() || "";
   if (bin === "chromium" || bin === "chromium-browser" || bin === "google-chrome") {
-    childCommand = `${command} --user-data-dir=/tmp/chromium-${sessionId} --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage`;
+    childCommand = `${command} --no-sandbox --user-data-dir=/tmp/chromium-${sessionId} --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage`;
   }
 
   const child = spawn(

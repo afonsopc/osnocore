@@ -46,6 +46,17 @@ cp /app/scripts/xlaunch.sh /home/user/.local/bin/xlaunch
 chmod +x /home/user/.local/bin/xlaunch
 chown user:user /home/user/.local/bin/xlaunch
 
+# Install xwrap-refresh and auto-generate shims for all GUI apps
+cp /app/scripts/xwrap-refresh.sh /home/user/.local/bin/xwrap-refresh
+chmod +x /home/user/.local/bin/xwrap-refresh
+chown user:user /home/user/.local/bin/xwrap-refresh
+su - user -c '/home/user/.local/bin/xwrap-refresh'
+
+# Apt hook: auto-refresh shims after every install/remove
+cat > /etc/apt/apt.conf.d/99xwrap-refresh << 'APTHOOK'
+DPkg::Post-Invoke { "su - user -c '/home/user/.local/bin/xwrap-refresh' 2>/dev/null || true"; };
+APTHOOK
+
 cat > /etc/profile.d/osnocore.sh << 'PROFILE'
 export PATH="$HOME/.local/bin:$PATH"
 export SUDO_ASKPASS=/app/scripts/sudo-askpass.sh
