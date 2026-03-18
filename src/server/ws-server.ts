@@ -70,12 +70,13 @@ async function launchXApp(command: string): Promise<XAppSession> {
       "user",
       "bash",
       "-c",
-      `xpra start-desktop --bind-ws=0.0.0.0:${port} --html=on --start="matchbox-window-manager -use_titlebar no" --start-child="${childCommand}" --exit-with-children --no-daemon --no-notifications --no-mdns --speaker=yes --microphone=no --resize-display=yes --dpi=96 2>&1`,
+      `export XDG_RUNTIME_DIR=/run/user/1001 PULSE_SERVER=unix:/run/user/1001/pulse/native HOME=/home/user && xpra start-desktop --bind-ws=0.0.0.0:${port} --html=on --start="matchbox-window-manager -use_titlebar no" --start-child="${childCommand}" --exit-with-children --no-daemon --no-notifications --no-mdns --pulseaudio=no --speaker=yes --microphone=no --resize-display=yes --dpi=96 2>&1`,
     ],
     {
       env: {
         ...process.env,
-        XDG_RUNTIME_DIR: "/tmp/xdg-runtime",
+        XDG_RUNTIME_DIR: "/run/user/1001",
+        PULSE_SERVER: "unix:/run/user/1001/pulse/native",
         HOME: "/home/user",
       },
       stdio: ["ignore", "pipe", "pipe"],

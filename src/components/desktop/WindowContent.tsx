@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import type { WindowState } from "@/lib/types";
 import { useDesktopStore } from "@/lib/store";
@@ -17,6 +17,46 @@ const Terminal = dynamic(() => import("@/components/terminal/Terminal").then(m =
       Loading...
     </div>
   ),
+});
+
+interface XAppFrameProps {
+  windowId: string;
+  xpraPort: number;
+  isActive?: boolean;
+}
+
+const XAppFrame = memo(function XAppFrame({ windowId, xpraPort, isActive }: XAppFrameProps) {
+  const focusWindow = useDesktopStore((s) => s.focusWindow);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (isActive && iframeRef.current) {
+      const frame = iframeRef.current;
+      setTimeout(() => frame.focus(), 0);
+    }
+  }, [isActive]);
+
+  const xpraUrl = `/xpra/${xpraPort}/?sharing=true&keyboard=true&clipboard=true&sound=true&printing=false&floating_menu=false&swap_keys=false&open_url=false&keyboard_layout=us&soft_keyboard=false&header=false&path=/xpra/${xpraPort}`;
+
+  return (
+    <div className="w-full h-full relative">
+      <iframe
+        ref={iframeRef}
+        src={xpraUrl}
+        className="w-full h-full border-0"
+        allow="clipboard-read; clipboard-write; autoplay"
+      />
+      {!isActive && (
+        <div
+          className="absolute inset-0"
+          onMouseDown={() => {
+            focusWindow(windowId);
+            setTimeout(() => iframeRef.current?.focus(), 0);
+          }}
+        />
+      )}
+    </div>
+  );
 });
 
 interface WindowContentProps {
@@ -51,26 +91,7 @@ export function WindowContent({ window: win, isActive }: WindowContentProps) {
     case "xapp": {
       const xpraPort = win.meta?.xpraPort;
       if (!xpraPort) return null;
-      const xpraUrl = `/xpra/${xpraPort}/?sharing=true&keyboard=true&clipboard=true&sound=true&printing=false&floating_menu=false&swap_keys=false&open_url=false&keyboard_layout=us&soft_keyboard=false&header=false&path=/xpra/${xpraPort}`;
-      return (
-        <div className="w-full h-full relative">
-          <iframe
-            ref={iframeRef}
-            src={xpraUrl}
-            className="w-full h-full border-0"
-            allow="clipboard-read; clipboard-write"
-          />
-          {!isActive && (
-            <div
-              className="absolute inset-0"
-              onMouseDown={() => {
-                focusWindow(win.id);
-                setTimeout(() => iframeRef.current?.focus(), 0);
-              }}
-            />
-          )}
-        </div>
-      );
+      return <XAppFrame windowId={win.id} xpraPort={xpraPort} isActive={isActive} />;
     }
     default:
       return null;

@@ -19,11 +19,19 @@ RUN apt-get install -y \
     npm \
     xvfb \
     chromium \
+    dbus \
     dbus-x11 \
     libgl1-mesa-dri \
     xterm \
     docker.io \
-    docker-compose
+    docker-compose \
+    pulseaudio \
+    gstreamer1.0-pulseaudio \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
+    fontconfig
 
 RUN curl -fsSL https://xpra.org/get-xpra.sh | bash
 RUN apt-get install -y xpra xpra-html5
@@ -55,7 +63,11 @@ COPY nginx.conf /etc/nginx/conf.d/osnocore.conf
 
 RUN mkdir -p /var/run/redis && chown redis:redis /var/run/redis
 RUN mkdir -p /tmp/xdg-runtime && chown user:user /tmp/xdg-runtime
-RUN echo "Content-Security-Policy: script-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; child-src 'self'; worker-src 'self'; frame-ancestors *; form-action 'self'; block-all-mixed-content" > /etc/xpra/http-headers/10_content_security_policy.txt
+RUN mkdir -p /run/user/1001 && chmod 700 /run/user/1001 && chown user:user /run/user/1001
+RUN mkdir -p /var/run/dbus && chown messagebus:messagebus /var/run/dbus
+RUN mkdir -p /home/user/.cache/fontconfig && chown -R user:user /home/user/.cache
+RUN fc-cache -f 2>/dev/null || true
+RUN echo "Content-Security-Policy: script-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; child-src 'self'; worker-src 'self' blob:; frame-ancestors *; form-action 'self'; media-src 'self' blob: data:" > /etc/xpra/http-headers/10_content_security_policy.txt
 COPY xpra-override.css /usr/share/xpra/www/css/xpra-override.css
 RUN sed -i 's|</head>|<link rel="stylesheet" href="css/xpra-override.css" /></head>|' /usr/share/xpra/www/index.html \
     && rm -f /usr/share/xpra/www/index.html.br /usr/share/xpra/www/index.html.gz

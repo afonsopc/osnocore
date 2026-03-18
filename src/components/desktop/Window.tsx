@@ -19,11 +19,18 @@ export function Window({ window: win }: WindowProps) {
   const isActive = activeWindowId === win.id;
   const rndRef = useRef<Rnd>(null);
 
+  const refocusIframe = useCallback(() => {
+    setTimeout(() => {
+      rndRef.current?.resizableElement?.current?.querySelector("iframe")?.focus();
+    }, 0);
+  }, []);
+
   const handleDragStop = useCallback(
     (_e: unknown, d: { x: number; y: number }) => {
       updateWindow(win.id, { x: d.x, y: d.y });
+      refocusIframe();
     },
-    [win.id, updateWindow]
+    [win.id, updateWindow, refocusIframe]
   );
 
   const handleResizeStop = useCallback(
@@ -40,8 +47,9 @@ export function Window({ window: win }: WindowProps) {
         x: position.x,
         y: position.y,
       });
+      refocusIframe();
     },
-    [win.id, updateWindow]
+    [win.id, updateWindow, refocusIframe]
   );
 
   if (win.minimized) return null;
@@ -84,7 +92,7 @@ export function Window({ window: win }: WindowProps) {
               : "#1a1a2a",
             borderBottom: "1px solid var(--color-border)",
           }}
-          onDoubleClick={() => toggleMaximize(win.id)}
+          onDoubleClick={() => { toggleMaximize(win.id); refocusIframe(); }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <span className="opacity-60">
@@ -108,6 +116,7 @@ export function Window({ window: win }: WindowProps) {
               onClick={(e) => {
                 e.stopPropagation();
                 toggleMaximize(win.id);
+                refocusIframe();
               }}
               title="Maximize"
             />

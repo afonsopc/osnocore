@@ -29,6 +29,8 @@ RUN apt-get install -y \
     gstreamer1.0-pulseaudio \
     gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
     fontconfig
 
 RUN curl -fsSL https://xpra.org/get-xpra.sh | bash
@@ -57,7 +59,7 @@ RUN mkdir -p /var/run/dbus && chown messagebus:messagebus /var/run/dbus
 RUN mkdir -p /home/user/.cache/fontconfig && chown -R user:user /home/user/.cache
 RUN fc-cache -f 2>/dev/null || true
 RUN mkdir -p /run/user/1001 && chmod 700 /run/user/1001 && chown user:user /run/user/1001
-RUN echo "Content-Security-Policy: script-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self'; object-src 'none'; child-src 'self'; worker-src 'self' blob:; frame-ancestors *; form-action 'self'; media-src 'self' blob:" > /etc/xpra/http-headers/10_content_security_policy.txt
+RUN echo "Content-Security-Policy: script-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self'; object-src 'none'; child-src 'self'; worker-src 'self' blob:; frame-ancestors *; form-action 'self'; media-src 'self' blob: data:" > /etc/xpra/http-headers/10_content_security_policy.txt
 COPY xpra-override.css /usr/share/xpra/www/css/xpra-override.css
 RUN sed -i 's|</head>|<link rel="stylesheet" href="css/xpra-override.css" /></head>|' /usr/share/xpra/www/index.html \
     && rm -f /usr/share/xpra/www/index.html.br /usr/share/xpra/www/index.html.gz
