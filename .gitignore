@@ -1,0 +1,10 @@
+node_modules/
+.next/
+bun.lockb
+*.tsbuildinfo
+next-env.d.ts
+.env
+.env.local
+home/
+dev_node_modules/
+dump.rdb

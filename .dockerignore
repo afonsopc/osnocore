@@ -1,0 +1,14 @@
+node_modules
+dev_node_modules
+.next
+.git
+home
+*.tsbuildinfo
+.env
+.env.local
+dump.rdb
+next-env.d.ts
+Dockerfile
+Dockerfile.dev
+docker-compose.yml
+tsconfig.server.json

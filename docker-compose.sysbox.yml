@@ -1,0 +1,12 @@
+services:
+  mestreos:
+    runtime: sysbox-runc
+    volumes:
+      - ./home:/home/user
+
+  mestreos-dev:
+    runtime: sysbox-runc
+    volumes:
+      - .:/app
+      - ./dev_node_modules:/app/node_modules
+      - ./home:/home/user
