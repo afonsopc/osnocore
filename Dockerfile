@@ -27,6 +27,7 @@ RUN apt-get install -y \
 
 RUN curl -fsSL https://xpra.org/get-xpra.sh | bash
 RUN apt-get install -y xpra xpra-html5
+RUN apt-get update && apt-get install -y matchbox-window-manager xdotool
 RUN rm -rf /var/lib/apt/lists/*
 
 ENV BUN_INSTALL=/usr/local

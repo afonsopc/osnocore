@@ -21,7 +21,7 @@ const DOCK_APPS: DockApp[] = [
   { type: "terminal", label: "Terminal", icon: <TerminalIcon size={22} /> },
   { type: "browser", label: "Browser", icon: <BrowserIcon size={22} /> },
   { type: "setup", label: "Setup", icon: <SetupIcon size={22} /> },
-  { type: "display", label: "Display", icon: <DisplayIcon size={22} /> },
+  { type: "display", label: "Apps", icon: <DisplayIcon size={22} /> },
   { type: "settings", label: "Settings", icon: <SettingsIcon size={22} /> },
 ];
 

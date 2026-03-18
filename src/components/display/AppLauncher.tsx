@@ -5,7 +5,6 @@ import { getWSClient } from "@/lib/ws-client";
 
 interface AppLauncherProps {
   windowId: string;
-  onCollapse: () => void;
 }
 
 const QUICK_APPS = [
@@ -13,7 +12,7 @@ const QUICK_APPS = [
   { label: "Chromium", command: "chromium --no-sandbox" },
 ];
 
-export function AppLauncher({ windowId, onCollapse }: AppLauncherProps) {
+export function AppLauncher({ windowId }: AppLauncherProps) {
   const [command, setCommand] = useState("");
 
   const launch = (cmd: string) => {
@@ -23,37 +22,34 @@ export function AppLauncher({ windowId, onCollapse }: AppLauncherProps) {
   };
 
   return (
-    <div className="flex-none flex items-center gap-2 px-3 py-1.5 bg-[var(--color-surface)] border-b border-[var(--color-border)]">
-      <input
-        type="text"
-        value={command}
-        onChange={(e) => setCommand(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && launch(command)}
-        placeholder="Command (e.g. gimp, firefox)"
-        className="flex-1 px-2 py-1 text-xs bg-[var(--color-bg)] text-[var(--color-text)] border border-[var(--color-border)] rounded outline-none focus:border-indigo-500"
-      />
-      <button
-        onClick={() => launch(command)}
-        className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-500"
-      >
-        Launch
-      </button>
-      {QUICK_APPS.map((app) => (
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={command}
+          onChange={(e) => setCommand(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && launch(command)}
+          placeholder="Command (e.g. gimp, firefox)"
+          className="flex-1 px-3 py-2 text-sm bg-[var(--color-bg)] text-[var(--color-text)] border border-[var(--color-border)] rounded-lg outline-none focus:border-indigo-500"
+        />
         <button
-          key={app.label}
-          onClick={() => launch(app.command)}
-          className="px-2 py-1 text-xs bg-white/5 text-[var(--color-text-muted)] rounded hover:bg-white/10 hover:text-[var(--color-text)]"
+          onClick={() => launch(command)}
+          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-500"
         >
-          {app.label}
+          Launch
         </button>
-      ))}
-      <button
-        onClick={onCollapse}
-        className="px-1 py-1 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
-        title="Hide launcher"
-      >
-        ×
-      </button>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {QUICK_APPS.map((app) => (
+          <button
+            key={app.label}
+            onClick={() => launch(app.command)}
+            className="px-4 py-2 text-sm bg-white/5 text-[var(--color-text-muted)] rounded-lg hover:bg-white/10 hover:text-[var(--color-text)] border border-[var(--color-border)]"
+          >
+            {app.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

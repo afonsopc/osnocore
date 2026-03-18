@@ -10,3 +10,21 @@
 .window.border {
   border: none !important;
 }
+/* Desktop mode: fill entire viewport with the desktop surface */
+#screen {
+  background: transparent !important;
+}
+/* Hide any top bar / header in desktop mode */
+#header,
+#top_bar,
+.toolbar,
+#toolbar {
+  display: none !important;
+}
+/* Ensure the desktop canvas fills the viewport */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}

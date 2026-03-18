@@ -70,7 +70,7 @@ async function launchXApp(command: string): Promise<XAppSession> {
       "user",
       "bash",
       "-c",
-      `xpra start --bind-ws=0.0.0.0:${port} --html=on --start-child="${childCommand}" --exit-with-children --no-daemon --no-notifications --no-mdns --speaker=yes --microphone=no --resize-display=1920x1080 --dpi=96 2>&1`,
+      `xpra start-desktop --bind-ws=0.0.0.0:${port} --html=on --start="matchbox-window-manager -use_titlebar no" --start-child="${childCommand}" --exit-with-children --no-daemon --no-notifications --no-mdns --speaker=yes --microphone=no --resize-display=yes --dpi=96 2>&1`,
     ],
     {
       env: {
