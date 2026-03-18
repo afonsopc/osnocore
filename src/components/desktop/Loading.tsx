@@ -65,7 +65,7 @@ export function Loading({ onReady }: { onReady: () => void }) {
     <div className="fixed inset-0 flex flex-col items-center justify-center" style={{ background: "#0a0a14" }}>
       <div className="mb-10">
         <div className="text-3xl font-light tracking-widest text-[var(--color-text)]">
-          mestre<span className="text-indigo-400">os</span>
+          osno<span className="text-indigo-400">CORE</span>
         </div>
       </div>
 

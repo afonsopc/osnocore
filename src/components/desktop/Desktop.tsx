@@ -18,7 +18,7 @@ export function Desktop() {
 
   useEffect(() => {
     if (setupOpened.current) return;
-    const done = localStorage.getItem("mestreos:setup-done");
+    const done = localStorage.getItem("osnocore:setup-done");
     if (!done) {
       setupOpened.current = true;
       openWindow("setup");

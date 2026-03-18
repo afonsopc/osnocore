@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "mestreos",
+      "name": "osnocore",
       "dependencies": {
         "@xterm/addon-fit": "^0.10.0",
         "@xterm/addon-webgl": "^0.18.0",

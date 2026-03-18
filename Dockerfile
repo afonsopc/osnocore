@@ -35,7 +35,7 @@ COPY . .
 
 RUN bun run build
 
-COPY supervisord.conf /etc/supervisor/conf.d/mestreos.conf
+COPY supervisord.conf /etc/supervisor/conf.d/osnocore.conf
 
 RUN mkdir -p /var/run/redis && chown redis:redis /var/run/redis
 

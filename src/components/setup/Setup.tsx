@@ -124,7 +124,7 @@ export function Setup({ windowId }: SetupProps) {
     <div className="flex flex-col h-full" style={{ background: "#11111b" }}>
       <div className="px-6 pt-6 pb-4">
         <h1 className="text-lg font-medium text-[var(--color-text)]">
-          Welcome to MestreOS
+          Welcome to osnoCORE
         </h1>
         <p className="text-xs text-[var(--color-text-muted)] mt-1">
           Set up your development environment.
@@ -201,7 +201,7 @@ export function Setup({ windowId }: SetupProps) {
         <button
           className="px-4 py-1.5 rounded text-xs bg-[var(--color-surface-hover)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors"
           onClick={() => {
-            if (allDone) localStorage.setItem("mestreos:setup-done", "true");
+            if (allDone) localStorage.setItem("osnocore:setup-done", "true");
             closeWindow(windowId);
           }}
         >

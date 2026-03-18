@@ -1,5 +1,5 @@
 services:
-  mestreos:
+  osnocore:
     build: .
     ports:
       - "3000:3000"
@@ -11,7 +11,7 @@ services:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
     restart: unless-stopped
 
-  mestreos-dev:
+  osnocore-dev:
     build:
       context: .
       dockerfile: Dockerfile.dev

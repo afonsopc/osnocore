@@ -1,10 +1,10 @@
 services:
-  mestreos:
+  osnocore:
     runtime: sysbox-runc
     volumes:
       - ./home:/home/user
 
-  mestreos-dev:
+  osnocore-dev:
     runtime: sysbox-runc
     volumes:
       - .:/app

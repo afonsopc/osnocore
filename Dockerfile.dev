@@ -30,7 +30,7 @@ WORKDIR /app
 
 RUN mkdir -p /var/run/redis && chown redis:redis /var/run/redis
 
-COPY supervisord.dev.conf /etc/supervisor/conf.d/mestreos.conf
+COPY supervisord.dev.conf /etc/supervisor/conf.d/osnocore.conf
 
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

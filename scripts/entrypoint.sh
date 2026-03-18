@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-echo "Starting MestreOS..."
+echo "Starting osnoCORE..."
 
 chown -R user:user /home/user
 
-echo "user:mestreos" | chpasswd
+echo "user:osnocore" | chpasswd
 
 if [ ! -d /home/user/.oh-my-zsh ]; then
   echo "Setting up oh-my-zsh for user..."
@@ -39,7 +39,7 @@ cp /app/scripts/sudo-wrapper.sh /home/user/.local/bin/sudo
 chmod +x /home/user/.local/bin/sudo
 chown user:user /home/user/.local/bin/sudo
 
-cat > /etc/profile.d/mestreos.sh << 'PROFILE'
+cat > /etc/profile.d/osnocore.sh << 'PROFILE'
 export PATH="$HOME/.local/bin:$PATH"
 export SUDO_ASKPASS=/app/scripts/sudo-askpass.sh
 export BROWSER=/app/scripts/open-browser.sh
@@ -47,11 +47,11 @@ PROFILE
 
 if [ -S /var/run/docker.sock ]; then
   chmod 666 /var/run/docker.sock
-  export MESTREOS_DOCKER=socket
+  export OSNOCORE_DOCKER=socket
 else
   getent group docker > /dev/null 2>&1 || groupadd docker
   usermod -aG docker user
-  export MESTREOS_DOCKER=sysbox
+  export OSNOCORE_DOCKER=sysbox
 fi
 
 if [ "$NODE_ENV" = "development" ] && [ -f /app/package.json ]; then
@@ -60,4 +60,4 @@ if [ "$NODE_ENV" = "development" ] && [ -f /app/package.json ]; then
   bun install
 fi
 
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/mestreos.conf
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/osnocore.conf
