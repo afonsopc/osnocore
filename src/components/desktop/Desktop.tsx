@@ -13,6 +13,8 @@ export function Desktop() {
   const setContextMenu = useDesktopStore((s) => s.setContextMenu);
 
   const openWindow = useDesktopStore((s) => s.openWindow);
+  const closeWindow = useDesktopStore((s) => s.closeWindow);
+  const updateWindow = useDesktopStore((s) => s.updateWindow);
 
   const setupOpened = useRef(false);
 
@@ -36,13 +38,29 @@ export function Desktop() {
       if (msg.type === "sudo:prompt") {
         openWindow("auth", { askpassId: msg.id, askpassPrompt: msg.prompt });
       }
+      if (msg.type === "xapp:opened") {
+        const winId = openWindow("xapp", {
+          xpraPort: msg.port,
+          xappSessionId: msg.sessionId,
+        });
+        updateWindow(winId, { title: msg.title });
+      }
+      if (msg.type === "xapp:closed") {
+        const allWindows = useDesktopStore.getState().windows;
+        const xappWin = allWindows.find(
+          (w) => w.type === "xapp" && w.meta?.xappSessionId === msg.sessionId
+        );
+        if (xappWin) {
+          closeWindow(xappWin.id);
+        }
+      }
     });
 
     return () => {
       unsub();
       ws.disconnect();
     };
-  }, [openWindow]);
+  }, [openWindow, closeWindow, updateWindow]);
 
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {

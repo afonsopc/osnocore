@@ -1,6 +1,6 @@
 export interface WindowState {
   id: string;
-  type: "terminal" | "browser" | "setup" | "auth" | "settings";
+  type: "terminal" | "browser" | "setup" | "auth" | "settings" | "display" | "xapp";
   title: string;
   x: number;
   y: number;
@@ -14,6 +14,8 @@ export interface WindowState {
     url?: string;
     askpassId?: string;
     askpassPrompt?: string;
+    xpraPort?: number;
+    xappSessionId?: string;
   };
 }
 
@@ -32,7 +34,9 @@ export type WSMessage =
   | { type: "sudo:response"; id: string; password: string }
   | { type: "sudo:cancel"; id: string }
   | { type: "layout:update"; workspaceId: string; windows: WindowState[] }
-  | { type: "workspace:subscribe"; workspaceId: string };
+  | { type: "workspace:subscribe"; workspaceId: string }
+  | { type: "xapp:launch"; command: string }
+  | { type: "xapp:close"; sessionId: string };
 
 export type WSServerMessage =
   | { type: "terminal:output"; sessionId: string; data: string }
@@ -41,4 +45,7 @@ export type WSServerMessage =
   | { type: "layout:changed"; workspaceId: string; windows: WindowState[] }
   | { type: "browser:open"; url: string }
   | { type: "sudo:prompt"; id: string; prompt: string }
+  | { type: "xapp:opened"; sessionId: string; command: string; port: number; title: string }
+  | { type: "xapp:closed"; sessionId: string }
+  | { type: "xapp:error"; message: string }
   | { type: "error"; message: string };

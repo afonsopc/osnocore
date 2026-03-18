@@ -13,7 +13,7 @@ class WebSocketClient {
 
   constructor() {
     this.url = typeof window !== "undefined"
-      ? `ws://${window.location.hostname}:3001`
+      ? `ws://${window.location.host}/ws`
       : "";
   }
 

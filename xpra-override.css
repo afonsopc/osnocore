@@ -1,0 +1,12 @@
+/* Hide xpra on-screen keyboard */
+.simple-keyboard {
+  display: none !important;
+}
+/* Hide xpra window header/title bar in seamless mode */
+.windowhead {
+  display: none !important;
+}
+/* Remove window border */
+.window.border {
+  border: none !important;
+}

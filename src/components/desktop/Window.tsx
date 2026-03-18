@@ -5,7 +5,8 @@ import { Rnd } from "react-rnd";
 import type { WindowState } from "@/lib/types";
 import { useDesktopStore } from "@/lib/store";
 import { WindowContent } from "./WindowContent";
-import { TerminalIcon, BrowserIcon, SetupIcon, SettingsIcon } from "@/components/icons/AppIcons";
+import { TerminalIcon, BrowserIcon, SetupIcon, SettingsIcon, DisplayIcon } from "@/components/icons/AppIcons";
+import { getWSClient } from "@/lib/ws-client";
 
 interface WindowProps {
   window: WindowState;
@@ -87,7 +88,7 @@ export function Window({ window: win }: WindowProps) {
         >
           <div className="flex items-center gap-2 min-w-0">
             <span className="opacity-60">
-              {win.type === "terminal" ? <TerminalIcon size={12} /> : win.type === "browser" ? <BrowserIcon size={12} /> : win.type === "setup" ? <SetupIcon size={12} /> : <SettingsIcon size={12} />}
+              {win.type === "terminal" ? <TerminalIcon size={12} /> : win.type === "browser" ? <BrowserIcon size={12} /> : win.type === "setup" ? <SetupIcon size={12} /> : (win.type === "display" || win.type === "xapp") ? <DisplayIcon size={12} /> : <SettingsIcon size={12} />}
             </span>
             <span className="text-xs text-[var(--color-text-muted)] truncate">
               {win.title}
@@ -114,6 +115,9 @@ export function Window({ window: win }: WindowProps) {
               className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-400 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
+                if (win.type === "xapp" && win.meta?.xappSessionId) {
+                  getWSClient().send({ type: "xapp:close", sessionId: win.meta.xappSessionId });
+                }
                 closeWindow(win.id);
               }}
               title="Close"

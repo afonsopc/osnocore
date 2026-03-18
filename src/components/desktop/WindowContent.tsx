@@ -6,6 +6,7 @@ import { Browser } from "@/components/browser/Browser";
 import { Setup } from "@/components/setup/Setup";
 import { Settings } from "@/components/settings/Settings";
 import { PasswordPrompt } from "@/components/auth/PasswordPrompt";
+import { Display } from "@/components/display/Display";
 
 const Terminal = dynamic(() => import("@/components/terminal/Terminal").then(m => m.Terminal), {
   ssr: false,
@@ -32,6 +33,20 @@ export function WindowContent({ window: win }: WindowContentProps) {
       return <PasswordPrompt windowId={win.id} askpassId={win.meta?.askpassId} prompt={win.meta?.askpassPrompt} />;
     case "settings":
       return <Settings windowId={win.id} />;
+    case "display":
+      return <Display windowId={win.id} />;
+    case "xapp": {
+      const xpraPort = win.meta?.xpraPort;
+      if (!xpraPort) return null;
+      const xpraUrl = `/xpra/${xpraPort}/?sharing=true&keyboard=true&clipboard=true&sound=true&printing=false&floating_menu=false&swap_keys=false&open_url=false&keyboard_layout=us&soft_keyboard=false&header=false&path=/xpra/${xpraPort}`;
+      return (
+        <iframe
+          src={xpraUrl}
+          className="w-full h-full border-0"
+          allow="clipboard-read; clipboard-write"
+        />
+      );
+    }
     default:
       return null;
   }
