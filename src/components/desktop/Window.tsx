@@ -126,7 +126,7 @@ export function Window({ window: win }: WindowProps) {
         </div>
 
         <div className="flex-1 overflow-hidden">
-          <WindowContent window={win} />
+          <WindowContent window={win} isActive={isActive} />
         </div>
       </div>
     </Rnd>

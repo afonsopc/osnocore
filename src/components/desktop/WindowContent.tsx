@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import type { WindowState } from "@/lib/types";
+import { useDesktopStore } from "@/lib/store";
 import { Browser } from "@/components/browser/Browser";
 import { Setup } from "@/components/setup/Setup";
 import { Settings } from "@/components/settings/Settings";
@@ -19,9 +21,20 @@ const Terminal = dynamic(() => import("@/components/terminal/Terminal").then(m =
 
 interface WindowContentProps {
   window: WindowState;
+  isActive?: boolean;
 }
 
-export function WindowContent({ window: win }: WindowContentProps) {
+export function WindowContent({ window: win, isActive }: WindowContentProps) {
+  const focusWindow = useDesktopStore((s) => s.focusWindow);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (isActive && iframeRef.current) {
+      const frame = iframeRef.current;
+      setTimeout(() => frame.focus(), 0);
+    }
+  }, [isActive]);
+
   switch (win.type) {
     case "terminal":
       return <Terminal windowId={win.id} sessionId={win.meta?.terminalSessionId} />;
@@ -40,11 +53,23 @@ export function WindowContent({ window: win }: WindowContentProps) {
       if (!xpraPort) return null;
       const xpraUrl = `/xpra/${xpraPort}/?sharing=true&keyboard=true&clipboard=true&sound=true&printing=false&floating_menu=false&swap_keys=false&open_url=false&keyboard_layout=us&soft_keyboard=false&header=false&path=/xpra/${xpraPort}`;
       return (
-        <iframe
-          src={xpraUrl}
-          className="w-full h-full border-0"
-          allow="clipboard-read; clipboard-write"
-        />
+        <div className="w-full h-full relative">
+          <iframe
+            ref={iframeRef}
+            src={xpraUrl}
+            className="w-full h-full border-0"
+            allow="clipboard-read; clipboard-write"
+          />
+          {!isActive && (
+            <div
+              className="absolute inset-0"
+              onMouseDown={() => {
+                focusWindow(win.id);
+                setTimeout(() => iframeRef.current?.focus(), 0);
+              }}
+            />
+          )}
+        </div>
       );
     }
     default:
