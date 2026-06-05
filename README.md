@@ -22,4 +22,4 @@ docker compose -f docker-compose.yml -f docker-compose.sysbox.yml --profile prod
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-On first launch a setup wizard walks you through installing Claude Code and configuring SSH, GitHub CLI, and Git. You can optionally pass an `ANTHROPIC_API_KEY` through the environment.
+On first launch a setup wizard walks you through installing Claude Code and configuring SSH, GitHub CLI, and Git.
