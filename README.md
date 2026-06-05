@@ -1,6 +1,6 @@
 # osnoCORE
 
-A browser-based desktop environment. It runs a full dev workspace inside a single Docker container — draggable windows, persistent terminals, an integrated browser, and a first-run setup wizard — all accessible from your browser.
+A browser-based desktop environment. It runs a full dev workspace inside a single Docker container, with draggable windows, persistent terminals, an integrated browser, and a first-run setup wizard, all accessible from your browser.
 
 Under the hood it's a Next.js frontend talking to a WebSocket server that spawns real shells via `node-pty`, with Redis for state and supervisord keeping everything alive.
 
